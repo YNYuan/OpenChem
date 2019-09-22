@@ -1,4 +1,4 @@
-from openchem.data.utils import read_smiles_property_file, save_smi_to_file, get_tokens
+from openchem.data.utils import read_smiles_property_file, save_smiles_property_file, get_tokens
 from sklearn.model_selection import train_test_split
 
 #for log p
