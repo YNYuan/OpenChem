@@ -47,11 +47,11 @@ node_attributes['atom_element'] = Attribute('node', 'atom_element',
                                             values=list(range(11)))
 
 train_dataset = GraphDataset(get_atomic_attributes, node_attributes,
-                             './benchmark_datasets/Lipophilicity_dataset/Lipophilicity_train.csv',
-                             delimiter=',', cols_to_read=[0, 1])
+                       './benchmark_datasets/logp_dataset/train.csv',
+                       delimiter=',', cols_to_read=[0, 1])
 test_dataset = GraphDataset(get_atomic_attributes, node_attributes,
-                             './benchmark_datasets/Lipophilicity_dataset/Lipophilicity_test.csv',
-                             delimiter=',', cols_to_read=[0, 1])
+                   './benchmark_datasets/logp_dataset/test.csv',
+                   delimiter=',', cols_to_read=[0, 1])
 
 model = Graph2Label
 
@@ -59,9 +59,9 @@ model_params = {
     'task': 'regression',
     'data_layer': GraphDataset,
     'use_clip_grad': False,
-    'batch_size': 256,
-    'num_epochs': 101,
-    'logdir': '/home/user/Work/OpenChem/logs/logp_gcnn_logs',
+    'batch_size': 128,
+    'num_epochs': 200,
+    'logdir': './logs',
     'print_every': 10,
     'save_every': 5,
     'train_data_layer': train_dataset,
@@ -70,12 +70,12 @@ model_params = {
     'criterion': nn.MSELoss(),
     'optimizer': Adam,
     'optimizer_params': {
-        'lr': 0.0005,
+        'lr': 0.001,
     },
     'lr_scheduler': StepLR,
     'lr_scheduler_params': {
         'step_size': 15,
-        'gamma': 0.8
+        'gamma': 0.5
     },
     'encoder': GraphCNNEncoder,
     'encoder_params': {
@@ -89,7 +89,8 @@ model_params = {
         'input_size': 128,
         'n_layers': 2,
         'hidden_size': [128, 1],
-        'activation': [F.relu, identity]
-    }
+        'activation': F.relu,
+    },
+    'random_seed': 42
 }
 

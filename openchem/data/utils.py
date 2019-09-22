@@ -234,6 +234,8 @@ def read_smiles_property_file(path, cols_to_read, delimiter=',',
 
 
 def save_smiles_property_file(path, smiles, labels, delimiter=','):
+    smiles = np.reshape(smiles, [smiles.shape[0],1])
+    labels = np.reshape(labels, [labels.shape[0],1])
     f = open(path, 'w')
     n_targets = labels.shape[1]
     for i in range(len(smiles)):
