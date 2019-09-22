@@ -1,5 +1,6 @@
 from openchem.data.utils import read_smiles_property_file, save_smiles_property_file, get_tokens
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 #for log p
 data = read_smiles_property_file('./benchmark_datasets/logp_dataset/logP_labels.csv', cols_to_read=[1, 2])
