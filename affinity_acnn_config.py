@@ -22,16 +22,10 @@ def random_index(length, train_size):
     return train_idx, test_idx
 
 
-def my_feature_split(X_path, Z_path, Nbrs_path, Nbrs_Z_path, train_idx, test_idx):
-    X_matrix = np.load(X_path)
-    Z_matrix = np.load(Z_path)
-    Nbrs_matrix = np.load(Nbrs_path)
-    Nbrs_Z_matrix = np.load(Nbrs_Z_path)
-    trainX, testX = X_matrix[train_idx,:,:], X_matrix[test_idx,:,:]
-    trainZ, testZ = Z_matrix[train_idx,:,:], Z_matrix[test_idx,:,:]
-    trainNbrs, testNbrs = Nbrs_matrix[train_idx,:,:], Nbrs_matrix[test_idx,:,:]
-    trainNbrs_Z, testNbrs_Z = Nbrs_Z_matrix[train_idx,:,:], Nbrs_Z_matrix[test_idx,:,:]
-    return trainX, testX, trainZ, testZ, trainNbrs, testNbrs, trainNbrs_Z, testNbrs_Z
+def my_feature_split(matrix_path, train_idx, test_idx):
+    matrix = np.load(matrix_path)
+    train_matrix, test_matrix = matrix[train_idx,:,:], matrix[test_idx,:,:]
+    return train_matrix, test_matrix
 
 
 def my_target_split(whole_path, train_idx, test_idx):
@@ -68,7 +62,10 @@ class GraphDataset(Dataset):
 
 train_idx, test_idx = random_index(2770, 0.8)
 
-trainX_complex, testX_complex, trainZ_complex, testZ_complex, trainNbrs_complex, testNbrs_complex, trainNbrs_Z_complex, testNbrs_Z_complex = my_feature_split('../3d_dataset/complex_matrix.npy', '../3d_dataset/complex_type.npy', '../3d_dataset/complex_distance_matrix.npy', '../3d_dataset/complex_atomtype_matrix.npy', train_idx, test_idx)
+trainX_complex, testX_complex = my_feature_split('../3d_dataset/complex_matrix.npy', train_idx, test_idx)
+trainZ_complex, testZ_complex = my_feature_split('../3d_dataset/complex_type.npy', train_idx, test_idx)
+trainNbrs_complex, testNbrs_complex = my_feature_split('../3d_dataset/complex_distance_matrix.npy', train_idx, test_idx)
+trainNbrs_Z_complex, testNbrs_Z_complex = my_feature_split('../3d_dataset/complex_atomtype_matrix.npy', train_idx, test_idx)
 trainY, testY = my_target_split('../3d_dataset/whole_data.csv', train_idx, test_idx)
 
 train_dataset = GraphDataset(trainX_complex, trainZ_complex, trainNbrs_complex, trainNbrs_Z_complex, trainY)
