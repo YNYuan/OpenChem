@@ -35,7 +35,7 @@ class AtomicConvModel0(OpenChemModel):
   def __init__(self, params):
     super(AtomicConvModel0, self).__init__(params)
 
-    radial = None
+    self.radial = params['radial']
     self.atom_types = params['atom_types']
     self.MLP_list = nn.ModuleList([])
     for ind, type in enumerate(self.atom_types):
@@ -44,7 +44,7 @@ class AtomicConvModel0(OpenChemModel):
       self.MLP = self.mlp(self.mlp_params)
       self.MLP_list.append(self.MLP)
 
-    rp = [x for x in itertools.product(*radial)]
+    rp = [x for x in itertools.product(self.radial)]
 
     conv = AtomicConvolution(
         atom_types=self.atom_types, radial_params=rp,
