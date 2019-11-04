@@ -51,12 +51,17 @@ class AtomicConvModel0(OpenChemModel):
         boxsize=None)
     self.conv = conv
 
-  def forward(self, complex_X, complex_Z, complex_Nbrs, complex_Nbrs_Z, eval=False):
+  def forward(self, input, eval=False):
     if eval:
       self.eval()
     else:
       self.train()
 
+    complex_X = input[0] 
+    complex_Z = input[1]
+    complex_Nbrs = input[2]
+    complex_Nbrs_Z = input[3]
+    
     complex_conv = self.conv.forward([complex_X, complex_Nbrs, complex_Nbrs_Z])
 
     complex_zeros = torch.zeros_like(complex_Z)
@@ -71,7 +76,7 @@ class AtomicConvModel0(OpenChemModel):
     
     return torch.unsqueeze(complex_energy, 1)
 
-  def cast_input(self, sample):
+  def cast_inputs(self, sample):
     batch_X = torch.tensor(sample['X_matrix'],
         requires_grad=True).float()
     batch_Z = torch.tensor(sample['Z_matrix'],

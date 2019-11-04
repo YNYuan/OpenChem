@@ -14,8 +14,8 @@ class AtomicConvolution(nn.Module):
         self.atom_types = atom_types
         vars = []
         for i in range(3):
-            val = np.array([p[i] for p in self.radial_params]).reshape((-1, 1, 1, 1))
-            vars.append(Parameter(torch.FloatTensor(val)))
+            val = np.array(self.radial_params[i][0]).reshape((-1, 1, 1, 1))
+            vars.append(torch.FloatTensor(val))
         self.rc = vars[0]
         self.rs = vars[1]
         self.re = vars[2]
