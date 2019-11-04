@@ -41,7 +41,7 @@ def main():
                         help='number of data loading workers (default: 0)')
     parser.add_argument('--random_seed', default=0, type=int, metavar='N',
                         help='random_seed (default: 0)')
-    parser.add_argument("--local_rank", type=int)
+    parser.add_argument("--local_rank", default=-1, type=int)
 
     args, unknown = parser.parse_known_args()
 
