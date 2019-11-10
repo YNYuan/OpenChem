@@ -7,7 +7,7 @@ from torch.nn.parameter import Parameter
 class AtomicConvolution(nn.Module):
 
     def __init__(self, atom_types=None, 
-    radial_params=list(), boxsize=None, use_cuda):
+    radial_params=list(), boxsize=None, use_cuda=False):
         super(AtomicConvolution, self).__init__()
         self.boxsize = boxsize
         self.radial_params = radial_params
