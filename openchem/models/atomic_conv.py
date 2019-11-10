@@ -39,7 +39,7 @@ class AtomicConvModel0(OpenChemModel):
     self.atom_types = params['atom_types']
     self.MLP_list = nn.ModuleList([])
     for ind, atomtype in enumerate(self.atom_types):
-      self.mlp = self.params['mlp']
+      self.mlp = self.params['mlp'].cuda()
       self.mlp_params = self.params['mlp_params']
       self.MLP = self.mlp(self.mlp_params)
       self.MLP_list.append(self.MLP)
@@ -64,7 +64,7 @@ class AtomicConvModel0(OpenChemModel):
     complex_Nbrs_Z = input[3]
     
     complex_conv = self.conv.forward([complex_X, complex_R, complex_Nbrs_Z])
-    complex_zeros = torch.zeros_like(complex_Z).cuda()
+    complex_zeros = torch.zeros_like(complex_Z)
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
       complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
