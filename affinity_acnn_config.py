@@ -90,7 +90,7 @@ model_params = {
     'train_data_layer': train_dataset,
     'val_data_layer': test_dataset,
     'eval_metrics': r2_score,
-    'criterion': nn.MSELoss().cuda(),
+    'criterion': nn.MSELoss(),
     'optimizer': Adam,
     'optimizer_params': {
         'lr': 0.001,
