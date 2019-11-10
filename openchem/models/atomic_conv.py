@@ -41,7 +41,7 @@ class AtomicConvModel0(OpenChemModel):
     for ind, atomtype in enumerate(self.atom_types):
       self.mlp = self.params['mlp']
       self.mlp_params = self.params['mlp_params']
-      self.MLP = self.mlp(self.mlp_params).cuda()
+      self.MLP = self.mlp(self.mlp_params).cuda(1)
       self.MLP_list.append(self.MLP)
 
     rp = [x for x in itertools.product(*self.radial)]
@@ -64,7 +64,6 @@ class AtomicConvModel0(OpenChemModel):
     complex_Nbrs_Z = input[3]
     
     complex_conv = self.conv.forward([complex_X, complex_R, complex_Nbrs_Z])
-    print('whether_cuda:',type(complex_conv))
     complex_zeros = torch.zeros_like(complex_Z)
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
@@ -91,12 +90,12 @@ class AtomicConvModel0(OpenChemModel):
     else:
         batch_labels = batch_labels.float()
     if self.use_cuda:
-        batch_X = batch_X.cuda()
-        batch_Z = batch_Z.cuda()
+        batch_X = batch_X.cuda(1)
+        batch_Z = batch_Z.cuda(1)
         #batch_Nbrs = batch_Nbrs.cuda()
-        batch_R = batch_R.cuda()
-        batch_Nbrs_Z = batch_Nbrs_Z.cuda()
-        batch_labels = batch_labels.cuda()
+        batch_R = batch_R.cuda(1)
+        batch_Nbrs_Z = batch_Nbrs_Z.cuda(1)
+        batch_labels = batch_labels.cuda(1)
     batch_inp = (batch_X, batch_Z, batch_R, batch_Nbrs_Z)
     return batch_inp, batch_labels
 
