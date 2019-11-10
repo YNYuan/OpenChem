@@ -78,17 +78,13 @@ class AtomicConvModel0(OpenChemModel):
     return complex_energy#torch.unsqueeze(complex_energy, 1)
 
   def cast_inputs(self, sample):
-    batch_X = torch.tensor(sample['X_matrix'],
-        requires_grad=True).float()
-    batch_Z = torch.tensor(sample['Z_matrix'],
-        requires_grad=True).float()
+    batch_X = sample['X_matrix'].clone().detach().requires_grad_(True)
+    batch_Z = sample['Z_matrix'].clone().detach().requires_grad_(True)
     # batch_Nbrs = torch.tensor(sample['Nbrs_matrix'],
     #     requires_grad=True).float()
-    batch_R = torch.tensor(sample['R_matrix'],
-        requires_grad=True).float()
-    batch_Nbrs_Z = torch.tensor(sample['Nbrs_Z_matrix'],
-        requires_grad=True).float()
-    batch_labels = torch.tensor(sample['target'])
+    batch_R = sample['R_matrix'].clone().detach().requires_grad_(True)
+    batch_Nbrs_Z = sample['Nbrs_Z_matrix'].clone().detach().requires_grad_(True)
+    batch_labels = sample['target'].clone().detach().requires_grad_(False)
     if self.task == 'classification':
         batch_labels = batch_labels.long()
     else:

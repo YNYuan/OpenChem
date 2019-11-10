@@ -146,8 +146,8 @@ def main():
         else:
             checkpoint = None
 
-    train_config = copy.deepcopy(model_config)
-    eval_config = copy.deepcopy(model_config)
+    train_config = model_config#copy.deepcopy(model_config)
+    eval_config = model_config#copy.deepcopy(model_config)
 
     args.distributed = args.local_rank >= 0
 
@@ -190,7 +190,7 @@ def main():
     cudnn.benchmark = True
 
     if args.mode == "train" or args.mode == "train_eval":
-        train_dataset = copy.deepcopy(model_config['train_data_layer'])
+        train_dataset = model_config['train_data_layer']#copy.deepcopy(model_config['train_data_layer'])
         if model_config['task'] == 'classification':
             train_dataset.target = train_dataset.target.reshape(-1)
         if args.distributed:
@@ -211,7 +211,7 @@ def main():
             "validation data layer must be specified")
 
     if args.mode in ["eval", "train_eval"]:
-        val_dataset = copy.deepcopy(model_config['val_data_layer'])
+        val_dataset = model_config['val_data_layer']#copy.deepcopy(model_config['val_data_layer'])
         if model_config['task'] == 'classification':
             val_dataset.target = val_dataset.target.reshape(-1)
         val_loader = DataLoader(dataset=val_dataset, batch_size=model_config['batch_size'],
