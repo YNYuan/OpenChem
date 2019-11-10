@@ -62,7 +62,7 @@ class AtomicConvolution(nn.Module):
         return FC
 
     def gaussian_distance_matrix(self, R, rs, re):
-        gdm = torch.exp(-re * (R - rs)**2)
+        gdm = torch.FloatTensor(torch.exp(-re * (R - rs)**2)).cuda()
         return gbm
 
     def distance_tensor(self, X, Nbrs, boxsize, B, N, M, d):
