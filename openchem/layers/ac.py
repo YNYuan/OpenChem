@@ -46,7 +46,7 @@ class AtomicConvolution(nn.Module):
             layer = torch.cat(sym, 0)
 
         layer = layer.permute(1, 2, 0)  # (l, B, N) -> (B, N, l)
-        bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True)
+        bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True).cuda()
         return bn(layer)
 
     def radial_symmetry_function(self, R, rc, rs, re):
