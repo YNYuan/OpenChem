@@ -176,6 +176,7 @@ def main():
         deco_print("Loading model from {}".format(checkpoint))
 
     if args.distributed:
+        print('distributed')
         torch.cuda.set_device(args.local_rank)
         dist.init_process_group(backend=args.dist_backend,
                                 init_method='env://')
