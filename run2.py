@@ -50,6 +50,7 @@ def main():
                          "['train', 'eval', 'train_eval']")
     config_module = runpy.run_path(args.config_file)
 
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     model_config = config_module.get('model_params', None)
     random.seed(args.random_seed)
     torch.manual_seed(args.random_seed)
@@ -176,7 +177,6 @@ def main():
         deco_print("Loading model from {}".format(checkpoint))
 
     if args.distributed:
-        print('distributed')
         torch.cuda.set_device(args.local_rank)
         dist.init_process_group(backend=args.dist_backend,
                                 init_method='env://')
@@ -227,7 +227,7 @@ def main():
     # create model
     model = model_object(params=model_config)
     if model_config['use_cuda']:
-        model = model.cuda(1)
+        model = model.cuda()
 
     if args.distributed:
         model = DistributedDataParallel(model, device_ids=[args.local_rank],
