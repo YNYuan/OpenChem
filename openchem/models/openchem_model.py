@@ -92,7 +92,7 @@ def build_training(model, params):
     use_cuda = params['use_cuda']
     criterion = params['criterion']
     if use_cuda:
-        criterion = criterion.cuda()
+        criterion = criterion.cuda(1)
     # train_loader = params['train_loader']
     # val_loader = params['val_loader']
     return criterion, optimizer, lr_scheduler #, train_loader, val_loader

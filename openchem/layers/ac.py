@@ -17,7 +17,7 @@ class AtomicConvolution(nn.Module):
         for i in range(3):
             val = np.array([p[i] for p in self.radial_params]).reshape((-1, 1, 1, 1))
             if use_cuda:
-                vars.append(torch.FloatTensor(val).cuda())
+                vars.append(torch.FloatTensor(val).cuda(1))
             else:
                 vars.append(torch.FloatTensor(val))
         self.rc = vars[0]
@@ -51,7 +51,7 @@ class AtomicConvolution(nn.Module):
 
         layer = layer.permute(1, 2, 0)  # (l, B, N) -> (B, N, l)
         if self.use_cuda:
-            bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True).cuda()
+            bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True).cuda(1)
         else:
             bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True)
         return bn(layer)
