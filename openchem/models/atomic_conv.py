@@ -64,10 +64,11 @@ class AtomicConvModel0(OpenChemModel):
     complex_Nbrs_Z = input[3]
     
     complex_conv = self.conv.forward([complex_X, complex_R, complex_Nbrs_Z])
+    print('whether_cuda:',type(complex_conv))
     complex_zeros = torch.zeros_like(complex_Z)
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
-      complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
+      complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1).cuda()
       for i, sample in enumerate(complex_conv):
         complex_outputs[i] = self.MLP_list[ind](sample)
       cond = torch.eq(complex_Z, atomtype)
