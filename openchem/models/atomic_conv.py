@@ -41,7 +41,10 @@ class AtomicConvModel0(OpenChemModel):
     for ind, atomtype in enumerate(self.atom_types):
       self.mlp = self.params['mlp']
       self.mlp_params = self.params['mlp_params']
-      self.MLP = self.mlp(self.mlp_params).cuda()
+      if self.use_cuda:
+        self.MLP = self.mlp(self.mlp_params).cuda()
+      else:
+        self.MLP = self.mlp(self.mlp_params)
       self.MLP_list.append(self.MLP)
 
     rp = [x for x in itertools.product(*self.radial)]
@@ -67,7 +70,10 @@ class AtomicConvModel0(OpenChemModel):
     complex_zeros = torch.zeros_like(complex_Z)
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
-      complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1).cuda()
+      if self.use_cuda:
+        complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1).cuda()
+      else:
+        complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
       for i, sample in enumerate(complex_conv):
         complex_outputs[i] = self.MLP_list[ind](sample)
       cond = torch.eq(complex_Z, atomtype)
@@ -75,7 +81,9 @@ class AtomicConvModel0(OpenChemModel):
         torch.where(cond, complex_outputs, complex_zeros))
     complex_outputs = torch.stack(complex_atomtype_energy, dim=0).sum(dim=0)
     complex_energy = torch.sum(complex_outputs, 1)
-    return complex_energy.cuda()#torch.unsqueeze(complex_energy, 1)
+    if self.use_cuda:
+      complex_energy = complex_energy.cuda()
+    return complex_energy#torch.unsqueeze(complex_energy, 1)
 
   def cast_inputs(self, sample):
     batch_X = sample['X_matrix'].clone().detach().requires_grad_(True)

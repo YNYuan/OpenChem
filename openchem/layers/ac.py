@@ -7,15 +7,19 @@ from torch.nn.parameter import Parameter
 class AtomicConvolution(nn.Module):
 
     def __init__(self, atom_types=None, 
-    radial_params=list(), boxsize=None):
+    radial_params=list(), boxsize=None, use_cuda=False):
         super(AtomicConvolution, self).__init__()
         self.boxsize = boxsize
         self.radial_params = radial_params
         self.atom_types = atom_types
+        self.use_cuda = use_cuda
         vars = []
         for i in range(3):
             val = np.array([p[i] for p in self.radial_params]).reshape((-1, 1, 1, 1))
-            vars.append(torch.FloatTensor(val).cuda())
+            if use_cuda:
+                vars.append(torch.FloatTensor(val).cuda())
+            else:
+                vars.append(torch.FloatTensor(val))
         self.rc = vars[0]
         self.rs = vars[1]
         self.re = vars[2]
@@ -46,7 +50,10 @@ class AtomicConvolution(nn.Module):
             layer = torch.cat(sym, 0)
 
         layer = layer.permute(1, 2, 0)  # (l, B, N) -> (B, N, l)
-        bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True).cuda()
+        if self.use_cuda:
+            bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True).cuda()
+        else:
+            bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True)
         return bn(layer)
 
     def radial_symmetry_function(self, R, rc, rs, re):
