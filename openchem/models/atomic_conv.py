@@ -75,7 +75,7 @@ class AtomicConvModel0(OpenChemModel):
         torch.where(cond, complex_outputs, complex_zeros))
     complex_outputs = torch.stack(complex_atomtype_energy, dim=0).sum(dim=0)
     complex_energy = torch.sum(complex_outputs, 1)
-    return complex_energy#torch.unsqueeze(complex_energy, 1)
+    return complex_energy.cuda(1)#torch.unsqueeze(complex_energy, 1)
 
   def cast_inputs(self, sample):
     batch_X = sample['X_matrix'].clone().detach().requires_grad_(True)

@@ -101,8 +101,6 @@ def build_training(model, params):
 def train_step(model, optimizer, criterion, inp, target):
     optimizer.zero_grad()
     output = model.forward(inp, eval=False)
-    #print(output.shape)
-    #print(target.shape)
     loss = criterion(output, target)
     loss.backward()
     optimizer.step()
