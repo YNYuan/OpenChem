@@ -49,8 +49,8 @@ class AtomicConvolution(nn.Module):
         bn = nn.BatchNorm1d(layer.size()[1], track_running_stats=True)
         return bn(layer)
 
-    def radial_symmetry_function(self, R, rc, rs, e):
-        K = self.gaussian_distance_matrix(R, rs, e)
+    def radial_symmetry_function(self, R, rc, rs, re):
+        K = self.gaussian_distance_matrix(R, rs, re)
         FC = self.radial_cutoff(R, rc)
         return torch.mul(K, FC)
 
@@ -61,8 +61,9 @@ class AtomicConvolution(nn.Module):
         FC = torch.where(cond, T, E)
         return FC
 
-    def gaussian_distance_matrix(self, R, rs, e):
-        return torch.exp(-e * (R - rs)**2).cuda()
+    def gaussian_distance_matrix(self, R, rs, re):
+        gdm = torch.exp(-re * (R - rs)**2)
+        return gbm
 
     def distance_tensor(self, X, Nbrs, boxsize, B, N, M, d):
         flat_neighbors = torch.reshape(Nbrs, [-1, N * M])
