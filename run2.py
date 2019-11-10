@@ -24,8 +24,8 @@ from openchem.utils.utils import flatten_dict, nested_update, nest_dict
 
 def main():
     parser = argparse.ArgumentParser(description='Experiment parameters')
-    parser.add_argument("--use_cuda", default=torch.cuda.is_available(),
-                        help="Whether to train on GPU")
+    parser.add_argument("--use_cuda", default=False#torch.cuda.is_available()
+                        ,help="Whether to train on GPU")
     parser.add_argument("--config_file", required=True,
                         help="Path to the configuration file")
     parser.add_argument("--mode", default='train',
