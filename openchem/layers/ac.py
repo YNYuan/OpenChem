@@ -14,7 +14,7 @@ class AtomicConvolution(nn.Module):
         self.atom_types = atom_types
         vars = []
         for i in range(3):
-            val = np.array(self.radial_params[i][0]).reshape((-1, 1, 1, 1))
+            val = np.array([p[i] for p in self.radial_params]).reshape((-1, 1, 1, 1))
             vars.append(torch.FloatTensor(val))
         self.rc = vars[0]
         self.rs = vars[1]
@@ -22,14 +22,15 @@ class AtomicConvolution(nn.Module):
     
     def forward(self, inputs):
         X = inputs[0]
-        Nbrs = torch.IntTensor(inputs[1])
+        #Nbrs = inputs[1]
+        R = inputs[1]
         Nbrs_Z = inputs[2]
         N = X.size()[-2]
         d = X.size()[-1]
-        M = Nbrs.size()[-1]
+        M = R.size()[-1]
         B = X.size()[0]
-        D = self.distance_tensor(X, Nbrs, self.boxsize, B, N, M, d)
-        R = self.distance_matrix(D)
+        #D = self.distance_tensor(X, Nbrs, self.boxsize, B, N, M, d)
+        #R = self.distance_matrix(D)
         R = torch.unsqueeze(R, 0)
         rsf = self.radial_symmetry_function(R, self.rc, self.rs, self.re)
         if not self.atom_types:

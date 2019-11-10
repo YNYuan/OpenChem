@@ -101,6 +101,8 @@ def build_training(model, params):
 def train_step(model, optimizer, criterion, inp, target):
     optimizer.zero_grad()
     output = model.forward(inp, eval=False)
+    #print(output.shape)
+    #print(target.shape)
     loss = criterion(output, target)
     loss.backward()
     optimizer.step()
@@ -240,6 +242,8 @@ def evaluate(model, val_loader, criterion):
     cur_loss = loss_total / n_batches
     if task == 'classification':
         prediction = np.argmax(prediction, axis=1)
+    #print(len(prediction))
+    #print(len(ground_truth))
     metrics = calculate_metrics(prediction, ground_truth,
                                 eval_metrics)
     if print_logs(world_size):

@@ -38,13 +38,13 @@ class AtomicConvModel0(OpenChemModel):
     self.radial = params['radial']
     self.atom_types = params['atom_types']
     self.MLP_list = nn.ModuleList([])
-    for ind, type in enumerate(self.atom_types):
+    for ind, atomtype in enumerate(self.atom_types):
       self.mlp = self.params['mlp']
       self.mlp_params = self.params['mlp_params']
       self.MLP = self.mlp(self.mlp_params)
       self.MLP_list.append(self.MLP)
 
-    rp = [x for x in itertools.product(self.radial)]
+    rp = [x for x in itertools.product(*self.radial)]
 
     conv = AtomicConvolution(
         atom_types=self.atom_types, radial_params=rp,
@@ -59,33 +59,36 @@ class AtomicConvModel0(OpenChemModel):
 
     complex_X = input[0] 
     complex_Z = input[1]
-    complex_Nbrs = input[2]
+    #complex_Nbrs = input[2]
+    complex_R = input[2]
     complex_Nbrs_Z = input[3]
     
-    complex_conv = self.conv.forward([complex_X, complex_Nbrs, complex_Nbrs_Z])
-
+    complex_conv = self.conv.forward([complex_X, complex_R, complex_Nbrs_Z])
     complex_zeros = torch.zeros_like(complex_Z)
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
-      complex_outputs = self.MLP_list[ind](complex_conv)
+      complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
+      for i, sample in enumerate(complex_conv):
+        complex_outputs[i] = self.MLP_list[ind](sample)
       cond = torch.eq(complex_Z, atomtype)
       complex_atomtype_energy.append(
         torch.where(cond, complex_outputs, complex_zeros))
     complex_outputs = torch.stack(complex_atomtype_energy, dim=0).sum(dim=0)
     complex_energy = torch.sum(complex_outputs, 1)
-    
-    return torch.unsqueeze(complex_energy, 1)
+    return complex_energy#torch.unsqueeze(complex_energy, 1)
 
   def cast_inputs(self, sample):
     batch_X = torch.tensor(sample['X_matrix'],
         requires_grad=True).float()
     batch_Z = torch.tensor(sample['Z_matrix'],
         requires_grad=True).float()
-    batch_Nbrs = torch.tensor(sample['Nbrs_matrix'],
+    # batch_Nbrs = torch.tensor(sample['Nbrs_matrix'],
+    #     requires_grad=True).float()
+    batch_R = torch.tensor(sample['R_matrix'],
         requires_grad=True).float()
     batch_Nbrs_Z = torch.tensor(sample['Nbrs_Z_matrix'],
         requires_grad=True).float()
-    batch_labels = torch.tensor(sample['labels'])
+    batch_labels = torch.tensor(sample['target'])
     if self.task == 'classification':
         batch_labels = batch_labels.long()
     else:
@@ -93,10 +96,11 @@ class AtomicConvModel0(OpenChemModel):
     if self.use_cuda:
         batch_X = batch_X.cuda()
         batch_Z = batch_Z.cuda()
-        batch_Nbrs = batch_Nbrs.cuda()
+        #batch_Nbrs = batch_Nbrs.cuda()
+        batch_R = batch_R.cuda()
         batch_Nbrs_Z = batch_Nbrs_Z.cuda()
         batch_labels = batch_labels.cuda()
-    batch_inp = (batch_X, batch_Z, batch_Nbrs, batch_Nbrs_Z)
+    batch_inp = (batch_X, batch_Z, batch_R, batch_Nbrs_Z)
     return batch_inp, batch_labels
 
 
