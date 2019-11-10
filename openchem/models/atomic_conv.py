@@ -39,9 +39,9 @@ class AtomicConvModel0(OpenChemModel):
     self.atom_types = params['atom_types']
     self.MLP_list = nn.ModuleList([])
     for ind, atomtype in enumerate(self.atom_types):
-      self.mlp = self.params['mlp'].cuda()
+      self.mlp = self.params['mlp']
       self.mlp_params = self.params['mlp_params']
-      self.MLP = self.mlp(self.mlp_params)
+      self.MLP = self.mlp(self.mlp_params).cuda()
       self.MLP_list.append(self.MLP)
 
     rp = [x for x in itertools.product(*self.radial)]
