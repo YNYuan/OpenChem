@@ -51,7 +51,7 @@ class AtomicConvModel0(OpenChemModel):
 
     conv = AtomicConvolution(
         atom_types=self.atom_types, radial_params=rp,
-        boxsize=None)
+        boxsize=None, use_cuda=self.use_cuda)
     self.conv = conv
 
   def forward(self, input, eval=False):
