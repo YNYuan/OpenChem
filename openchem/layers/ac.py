@@ -15,7 +15,7 @@ class AtomicConvolution(nn.Module):
         vars = []
         for i in range(3):
             val = np.array([p[i] for p in self.radial_params]).reshape((-1, 1, 1, 1))
-            vars.append(torch.FloatTensor(val))
+            vars.append(torch.FloatTensor(val).cuda())
         self.rc = vars[0]
         self.rs = vars[1]
         self.re = vars[2]
@@ -62,8 +62,7 @@ class AtomicConvolution(nn.Module):
         return FC
 
     def gaussian_distance_matrix(self, R, rs, re):
-        gdm = torch.FloatTensor(torch.exp(-re * (R - rs)**2)).cuda()
-        return gbm
+        return torch.exp(-re * (R - rs)**2)
 
     def distance_tensor(self, X, Nbrs, boxsize, B, N, M, d):
         flat_neighbors = torch.reshape(Nbrs, [-1, N * M])
