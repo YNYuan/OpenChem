@@ -64,7 +64,7 @@ class AtomicConvModel0(OpenChemModel):
     complex_Nbrs_Z = input[3]
     
     complex_conv = self.conv.forward([complex_X, complex_R, complex_Nbrs_Z])
-    complex_zeros = torch.zeros_like(complex_Z)
+    complex_zeros = torch.zeros_like(complex_Z).cuda()
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
       complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
@@ -255,6 +255,7 @@ class AtomicConvModel(OpenChemModel):
       else:
           batch_labels = batch_labels.float()
       if self.use_cuda:
+          print('use_cuda')
           batch_X = batch_X.cuda()
           batch_Nbrs = batch_Nbrs.cuda()
           batch_Nbrs_Z = batch_Nbrs_Z.cuda()
