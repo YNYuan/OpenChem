@@ -13,6 +13,7 @@ from openchem.optimizer.openchem_optimizer import OpenChemOptimizer
 from openchem.optimizer.openchem_lr_scheduler import OpenChemLRScheduler
 
 import numpy as np
+import wandb
 
 
 class OpenChemModel(nn.Module):
@@ -136,6 +137,8 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
     save_every = params['save_every']
     n_epochs = params['num_epochs']
     logger = Logger(logdir + '/tensorboard_log/')
+    wandb.init(project="acnn")
+    wandb.watch(model)
     start = time.time()
     loss_total = 0
     n_batches = 0
@@ -164,6 +167,7 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
                 reduced_loss = loss.clone()
             loss_total += reduced_loss.item()
             n_batches += 1
+            wandb.log({"Train Loss": loss})
         cur_loss = loss_total / n_batches
         all_losses.append(cur_loss)
 
@@ -236,6 +240,7 @@ def evaluate(model, val_loader, criterion):
         loss = criterion(predicted, batch_target)
         loss_total += loss.item()
         n_batches += 1
+        wandb.log({"Test Loss": loss})
 
     cur_loss = loss_total / n_batches
     if task == 'classification':

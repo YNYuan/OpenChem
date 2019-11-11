@@ -1,0 +1,58 @@
+diff --git a/acnnlogs/tensorboard_log/events.out.tfevents.1573490750.perigee.21344.5.v2 b/acnnlogs/tensorboard_log/events.out.tfevents.1573490750.perigee.21344.5.v2
+deleted file mode 100644
+index 4ca8ddb..0000000
+Binary files a/acnnlogs/tensorboard_log/events.out.tfevents.1573490750.perigee.21344.5.v2 and /dev/null differ
+diff --git a/acnnlogs/tensorboard_log/events.out.tfevents.1573491050.perigee.21463.5.v2 b/acnnlogs/tensorboard_log/events.out.tfevents.1573491050.perigee.21463.5.v2
+deleted file mode 100644
+index d4c0c3a..0000000
+Binary files a/acnnlogs/tensorboard_log/events.out.tfevents.1573491050.perigee.21463.5.v2 and /dev/null differ
+diff --git a/openchem/models/openchem_model.py b/openchem/models/openchem_model.py
+index 397d75d..bc2ee44 100644
+--- a/openchem/models/openchem_model.py
++++ b/openchem/models/openchem_model.py
+@@ -13,6 +13,7 @@ from openchem.optimizer.openchem_optimizer import OpenChemOptimizer
+ from openchem.optimizer.openchem_lr_scheduler import OpenChemLRScheduler
+ 
+ import numpy as np
++import wandb
+ 
+ 
+ class OpenChemModel(nn.Module):
+@@ -136,6 +137,8 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
+     save_every = params['save_every']
+     n_epochs = params['num_epochs']
+     logger = Logger(logdir + '/tensorboard_log/')
++    wandb.init(project="acnn")
++    wandb.watch(model)
+     start = time.time()
+     loss_total = 0
+     n_batches = 0
+@@ -164,6 +167,7 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
+                 reduced_loss = loss.clone()
+             loss_total += reduced_loss.item()
+             n_batches += 1
++            wandb.log({"Train Loss": loss})
+         cur_loss = loss_total / n_batches
+         all_losses.append(cur_loss)
+ 
+@@ -176,6 +180,7 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
+                 assert val_loader is not None
+                 val_loss, metrics = evaluate(model, val_loader, criterion)
+                 val_losses.append(val_loss)
++                wandb.log({"Test Loss": loss})
+                 info = {'Train loss': cur_loss, 'Validation loss': val_loss,
+                         'Validation metrics': metrics,
+                         'LR': optimizer.param_groups[0]['lr']}
+diff --git a/run2.py b/run2.py
+index 3a069da..e2d0dc5 100644
+--- a/run2.py
++++ b/run2.py
+@@ -50,7 +50,7 @@ def main():
+                          "['train', 'eval', 'train_eval']")
+     config_module = runpy.run_path(args.config_file)
+ 
+-    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
++    #os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+     model_config = config_module.get('model_params', None)
+     random.seed(args.random_seed)
+     torch.manual_seed(args.random_seed)
