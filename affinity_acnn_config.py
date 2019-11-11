@@ -86,7 +86,7 @@ model_params = {
     'num_epochs': 100,
     'logdir': './acnnlogs',
     'print_every': 10,
-    'save_every': 5,
+    'save_every': 1,
     'train_data_layer': train_dataset,
     'val_data_layer': test_dataset,
     'eval_metrics': r2_score,
