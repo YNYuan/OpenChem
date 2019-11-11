@@ -50,7 +50,7 @@ def main():
                          "['train', 'eval', 'train_eval']")
     config_module = runpy.run_path(args.config_file)
 
-    #os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "1"
     model_config = config_module.get('model_params', None)
     random.seed(args.random_seed)
     torch.manual_seed(args.random_seed)

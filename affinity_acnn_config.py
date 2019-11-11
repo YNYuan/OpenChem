@@ -64,12 +64,12 @@ class GraphDataset(Dataset):
         return sample
 
 def get_dataset():
-    train_idx, test_idx = random_index(10, 0.6)
+    train_idx, test_idx = random_index(2770, 0.8)
 
-    trainX_complex, testX_complex = my_feature_split('../3d_dataset/complex_matrix_sub.npy', train_idx, test_idx)
-    trainZ_complex, testZ_complex = my_feature_split('../3d_dataset/complex_type_sub.npy', train_idx, test_idx)
-    trainNbrs_complex, testNbrs_complex = my_feature_split('../3d_dataset/complex_distance_matrix_sub.npy', train_idx, test_idx)
-    trainNbrs_Z_complex, testNbrs_Z_complex = my_feature_split('../3d_dataset/complex_atomtype_matrix_sub.npy', train_idx, test_idx)
+    trainX_complex, testX_complex = my_feature_split('../3d_dataset/complex_matrix.npy', train_idx, test_idx)
+    trainZ_complex, testZ_complex = my_feature_split('../3d_dataset/complex_type.npy', train_idx, test_idx)
+    trainNbrs_complex, testNbrs_complex = my_feature_split('../3d_dataset/complex_distance_matrix.npy', train_idx, test_idx)
+    trainNbrs_Z_complex, testNbrs_Z_complex = my_feature_split('../3d_dataset/complex_atomtype_matrix.npy', train_idx, test_idx)
     trainY, testY = my_target_split('../3d_dataset/whole_data.csv', train_idx, test_idx)
     train_dataset = GraphDataset(trainX_complex, trainZ_complex, trainNbrs_complex, trainNbrs_Z_complex, trainY)
     test_dataset = GraphDataset(testX_complex, testZ_complex, testNbrs_complex, testNbrs_Z_complex, testY)
@@ -82,7 +82,7 @@ model_params = {
     'task': 'regression',
     'data_layer': GraphDataset,
     'use_clip_grad': False,
-    'batch_size': 2,
+    'batch_size': 24,
     'num_epochs': 100,
     'logdir': './acnnlogs',
     'print_every': 10,
