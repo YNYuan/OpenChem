@@ -26,7 +26,7 @@ class AtomicConvModel0(OpenChemModel):
       self.mlp = self.params['mlp']
       self.mlp_params = self.params['mlp_params']
       if self.use_cuda:
-        self.MLP = self.mlp(self.mlp_params).cuda(1)
+        self.MLP = self.mlp(self.mlp_params).cuda()
       else:
         self.MLP = self.mlp(self.mlp_params)
       self.MLP_list.append(self.MLP)
@@ -55,7 +55,7 @@ class AtomicConvModel0(OpenChemModel):
     complex_atomtype_energy = []
     for ind, atomtype in enumerate(self.atom_types):
       if self.use_cuda:
-        complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1).cuda(1)
+        complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1).cuda()
       else:
         complex_outputs = torch.FloatTensor(complex_conv.shape[0], complex_conv.shape[1], 1)
       for i, sample in enumerate(complex_conv):
@@ -66,7 +66,7 @@ class AtomicConvModel0(OpenChemModel):
     complex_outputs = torch.stack(complex_atomtype_energy, dim=0).sum(dim=0)
     complex_energy = torch.sum(complex_outputs, 1)
     if self.use_cuda:
-      complex_energy = complex_energy.cuda(1)
+      complex_energy = complex_energy.cuda()
     return complex_energy#torch.unsqueeze(complex_energy, 1)
 
   def cast_inputs(self, sample):
@@ -82,11 +82,11 @@ class AtomicConvModel0(OpenChemModel):
     else:
         batch_labels = batch_labels.float()
     if self.use_cuda:
-        batch_X = batch_X.cuda(1)
-        batch_Z = batch_Z.cuda(1)
+        batch_X = batch_X.cuda()
+        batch_Z = batch_Z.cuda()
         #batch_Nbrs = batch_Nbrs.cuda()
         batch_R = batch_R.cuda()
-        batch_Nbrs_Z = batch_Nbrs_Z.cuda(1)
-        batch_labels = batch_labels.cuda(1)
+        batch_Nbrs_Z = batch_Nbrs_Z.cuda()
+        batch_labels = batch_labels.cuda()
     batch_inp = (batch_X, batch_Z, batch_R, batch_Nbrs_Z)
     return batch_inp, batch_labels
