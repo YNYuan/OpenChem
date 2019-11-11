@@ -82,7 +82,7 @@ model_params = {
     'task': 'regression',
     'data_layer': GraphDataset,
     'use_clip_grad': False,
-    'batch_size': 24,
+    'batch_size': 6,
     'num_epochs': 100,
     'logdir': './acnnlogs',
     'print_every': 10,
