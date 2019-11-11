@@ -1,0 +1,29 @@
+{
+    "root": "/oldroot/home/yay75/OpenChem",
+    "program": "run2.py",
+    "git": {
+        "remote": "git@github.com:YNYuan/OpenChem.git",
+        "commit": "70b5150b13d3615bb1fe47b9915d86e13351d26d"
+    },
+    "email": "xmyyn@126.com",
+    "startedAt": "2019-11-11T22:12:02.038942",
+    "host": "perigee",
+    "username": "yay75",
+    "executable": "/home/yay75/miniconda3/envs/openchem/bin/python",
+    "os": "Linux-4.15.0-62-generic-x86_64-with-debian-stretch-sid",
+    "python": "3.6.9",
+    "gpu": "GeForce GTX 980",
+    "gpu_count": 2,
+    "cpu_count": 8,
+    "cuda": "9.2.148",
+    "args": [
+        "--config_file=affinity_acnn_config.py",
+        "--mode=train_eval"
+    ],
+    "state": "failed",
+    "jobType": null,
+    "mode": "run",
+    "project": "acnn",
+    "heartbeatAt": "2019-11-11T22:28:51.012436",
+    "exitcode": 1
+}
