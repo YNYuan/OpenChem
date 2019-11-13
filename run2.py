@@ -190,7 +190,7 @@ def main():
 
     cudnn.benchmark = True
 
-    if args.mode == "train" or args.mode == "train_eval":
+    if args.mode == "train" or args.mode == "train_eval" or args.mode == "eval_both":
         train_dataset = model_config['train_data_layer']#copy.deepcopy(model_config['train_data_layer'])
         if model_config['task'] == 'classification':
             train_dataset.target = train_dataset.target.reshape(-1)
@@ -204,14 +204,14 @@ def main():
     else:
         train_loader = None
 
-    if args.mode in ["eval", "train_eval"] and (
+    if args.mode in ["eval", "train_eval", "eval_both"] and (
             'val_data_layer' not in model_config.keys() or model_config[
         'val_data_layer'] is None):
         raise IOError(
             "When model is run in 'eval' or 'train_eval' modes, "
             "validation data layer must be specified")
 
-    if args.mode in ["eval", "train_eval"]:
+    if args.mode in ["eval", "train_eval", "eval_both"]:
         val_dataset = model_config['val_data_layer']#copy.deepcopy(model_config['val_data_layer'])
         if model_config['task'] == 'classification':
             val_dataset.target = val_dataset.target.reshape(-1)
@@ -249,6 +249,8 @@ def main():
         fit(model, lr_scheduler, train_loader, optimizer, criterion,
             model_config, eval=True, val_loader=val_loader)
     elif args.mode == "eval":
+        evaluate(model, val_loader, criterion)
+    elif args.mode == "eval_both":
         print("Train Evaluation: ")
         evaluate(model, train_loader, criterion)
         print('\n', "Test Evaluation: ")
