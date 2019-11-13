@@ -235,7 +235,7 @@ def main():
                                         )
     else:
         model = DataParallel(model)
-    if args.continue_learning or args.mode == 'eval':
+    if args.continue_learning or args.mode == 'eval' or args.mode == 'eval_both':
         print("=> loading model  pre-trained model")
         weights = torch.load(checkpoint)
         model.load_state_dict(weights)
