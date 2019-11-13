@@ -249,6 +249,9 @@ def main():
         fit(model, lr_scheduler, train_loader, optimizer, criterion,
             model_config, eval=True, val_loader=val_loader)
     elif args.mode == "eval":
+        print("Train Evaluation: ")
+        evaluate(model, train_loader, criterion)
+        print('\n', "Test Evaluation: ")
         evaluate(model, val_loader, criterion)
 
 

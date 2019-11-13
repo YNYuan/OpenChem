@@ -13,7 +13,6 @@ from openchem.optimizer.openchem_optimizer import OpenChemOptimizer
 from openchem.optimizer.openchem_lr_scheduler import OpenChemLRScheduler
 
 import numpy as np
-import wandb
 
 
 class OpenChemModel(nn.Module):
