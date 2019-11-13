@@ -37,7 +37,7 @@ def main():
                         help='distributed backend')
     parser.add_argument('--seed', default=None, type=int,
                         help='seed for initializing training. ')
-    parser.add_argument('--workers', default=0, type=int, metavar='N',
+    parser.add_argument('--workers', default=4, type=int, metavar='N',
                         help='number of data loading workers (default: 0)')
     parser.add_argument('--random_seed', default=0, type=int, metavar='N',
                         help='random_seed (default: 0)')
