@@ -232,6 +232,7 @@ def evaluate(model, val_loader, criterion):
             batch_input, batch_target = model.cast_inputs(sample_batched)
         predicted = model.forward(batch_input, eval=True)
         prediction += list(predicted.detach().cpu().numpy())
+        print(prediction)
         ground_truth += list(batch_target.cpu().numpy())
         loss = criterion(predicted, batch_target)
         loss_total += loss.item()

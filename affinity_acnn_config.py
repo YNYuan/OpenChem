@@ -64,7 +64,7 @@ class GraphDataset(Dataset):
         return sample
 
 def get_dataset():
-    train_idx, test_idx = random_index(2770, 0.8)
+    train_idx, test_idx = random_index(15, 0.8)
 
     trainX_complex, testX_complex = my_feature_split('../3d_dataset/complex_matrix.npy', train_idx, test_idx)
     trainZ_complex, testZ_complex = my_feature_split('../3d_dataset/complex_type.npy', train_idx, test_idx)
@@ -82,7 +82,7 @@ model_params = {
     'task': 'regression',
     'data_layer': GraphDataset,
     'use_clip_grad': False,
-    'batch_size': 2,
+    'batch_size': 3,
     'num_epochs': 100,
     'logdir': './acnnlogs',
     'print_every': 10,
