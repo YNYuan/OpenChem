@@ -45,37 +45,38 @@ class GraphDataset(Dataset):
         self.R_matrix = R_matrix
         self.Nbrs_Z_matrix = Nbrs_Z_matrix
         self.target = target
-        self.num_features = X_matrix.shape[2]
+        #self.num_features = X_matrix.shape[2]
 
     def __len__(self):
         return len(self.target)
 
     def __getitem__(self, index):
-        sample = {'X_matrix': self.X_matrix[index].astype('float32'),
+        sample = {
+            'X_matrix': self.X_matrix[index].astype('float32'),
             'Z_matrix': self.Z_matrix[index].astype('float32'),
-            # 'Nbrs_matrix':
-            # self.Nbrs_matrix[index].astype('float32'),
-            'R_matrix':
-            self.R_matrix[index].astype('float32'),
-            'Nbrs_Z_matrix':
-            self.Nbrs_Z_matrix[index].astype('float32'),
+            # 'Nbrs_matrix': self.Nbrs_matrix[index].astype('float32'),
+            'R_matrix': self.R_matrix[index].astype('float32'),
+            'Nbrs_Z_matrix': self.Nbrs_Z_matrix[index].astype('float32'),
             'target': self.target[index].astype('float32')
         }
         return sample
 
-def get_dataset():
-    train_idx, test_idx = random_index(15, 0.8)
+def get_dataset(xpath, zpath, nbrspath, nbrszpath, targetpath):
+    train_idx, test_idx = random_index(10, 0.8)
 
-    trainX_complex, testX_complex = my_feature_split('../3d_dataset/complex_matrix.npy', train_idx, test_idx)
-    trainZ_complex, testZ_complex = my_feature_split('../3d_dataset/complex_type.npy', train_idx, test_idx)
-    trainNbrs_complex, testNbrs_complex = my_feature_split('../3d_dataset/complex_distance_matrix.npy', train_idx, test_idx)
-    trainNbrs_Z_complex, testNbrs_Z_complex = my_feature_split('../3d_dataset/complex_atomtype_matrix.npy', train_idx, test_idx)
-    trainY, testY = my_target_split('../3d_dataset/whole_data.csv', train_idx, test_idx)
-    train_dataset = GraphDataset(trainX_complex, trainZ_complex, trainNbrs_complex, trainNbrs_Z_complex, trainY)
-    test_dataset = GraphDataset(testX_complex, testZ_complex, testNbrs_complex, testNbrs_Z_complex, testY)
+    trainX, testX = my_feature_split(xpath, train_idx, test_idx)
+    trainZ, testZ = my_feature_split(zpath, train_idx, test_idx)
+    trainNbrs, testNbrs = my_feature_split(nbrspath, train_idx, test_idx)
+    trainNbrs_Z, testNbrs_Z = my_feature_split(nbrszpath, train_idx, test_idx)
+    trainY, testY = my_target_split(targetpath, train_idx, test_idx)
+    train_dataset = GraphDataset(trainX, trainZ, trainNbrs, trainNbrs_Z, trainY)
+    test_dataset = GraphDataset(testX, testZ, testNbrs, testNbrs_Z, testY)
     return train_dataset, test_dataset
 
-train_dataset, test_dataset = get_dataset()
+train_dataset, test_dataset = get_dataset('../3d_dataset/complex_matrix.npy', '../3d_dataset/complex_type.npy', 
+'../3d_dataset/complex_distance_matrix.npy', '../3d_dataset/complex_atomtype_matrix.npy',
+'../3d_dataset/whole_data.csv')
+
 model = AtomicConvModel0
 
 model_params = {
@@ -83,7 +84,7 @@ model_params = {
     'data_layer': GraphDataset,
     'use_clip_grad': False,
     'batch_size': 3,
-    'num_epochs': 100,
+    'num_epochs': 3,
     'logdir': './acnnlogs',
     'print_every': 10,
     'save_every': 1,

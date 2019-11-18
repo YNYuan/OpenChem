@@ -43,7 +43,6 @@ class AtomicConvModel0(OpenChemModel):
       self.eval()
     else:
       self.train()
-
     complex_X = input[0] 
     complex_Z = input[1]
     #complex_Nbrs = input[2]
