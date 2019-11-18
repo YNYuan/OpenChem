@@ -62,7 +62,7 @@ class GraphDataset(Dataset):
         return sample
 
 def get_dataset(xpath, zpath, nbrspath, nbrszpath, targetpath):
-    train_idx, test_idx = random_index(100, 0.8)
+    train_idx, test_idx = random_index(2770, 0.8)
 
     trainX, testX = my_feature_split(xpath, train_idx, test_idx)
     trainZ, testZ = my_feature_split(zpath, train_idx, test_idx)
@@ -84,7 +84,7 @@ model_params = {
     'data_layer': GraphDataset,
     'use_clip_grad': False,
     'batch_size': 3,
-    'num_epochs': 3,
+    'num_epochs': 100,
     'logdir': './acnnlogs',
     'print_every': 10,
     'save_every': 1,
@@ -112,6 +112,6 @@ model_params = {
         1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0,
         7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 10.5, 11.0, 11.5, 12.0], [0.0, 4.0, 8.0], [0.4]],
     'atom_types': [
-        6, 7., 8., 9., 15., 16., 17., 35., 53., 0.],
+        6, 7., 8., 9., 15., 16., 17., 35., 53.],
     'random_seed': 42
 }
