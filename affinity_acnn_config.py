@@ -62,7 +62,7 @@ class GraphDataset(Dataset):
         return sample
 
 def get_dataset(xpath, zpath, nbrspath, nbrszpath, targetpath):
-    train_idx, test_idx = random_index(10, 0.8)
+    train_idx, test_idx = random_index(100, 0.8)
 
     trainX, testX = my_feature_split(xpath, train_idx, test_idx)
     trainZ, testZ = my_feature_split(zpath, train_idx, test_idx)
