@@ -103,7 +103,7 @@ model_params = {
     },
     'mlp': OpenChemMLP,
     'mlp_params': {
-        'input_size': 660,
+        'input_size': 594,
         'n_layers': 4,
         'hidden_size': [32, 32, 16, 1],
         'activation': [F.relu, F.relu, F.relu, nn.Identity()],
