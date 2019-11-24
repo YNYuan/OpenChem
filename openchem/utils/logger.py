@@ -50,5 +50,5 @@ class Logger(object):
                           bucket_limit, bucket, step)
         self.writer.flush()
 
-    def close():
+    def close(self):
         self.writer.close()
