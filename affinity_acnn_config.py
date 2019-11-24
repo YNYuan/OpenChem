@@ -90,7 +90,7 @@ def get_dataset(xpath_c, zpath_c, nbrspath_c, nbrszpath_c, xpath_l, zpath_l, nbr
     trainNbrs_Z_l, testNbrs_Z_l = my_feature_split(nbrszpath_l, train_idx, test_idx)
     trainX_r, testX_r = my_feature_split(xpath_r, train_idx, test_idx)
     trainZ_r, testZ_r = my_feature_split(zpath_r, train_idx, test_idx)
-    trainNbrs_r, testNbrs_r = my_feature_split(nbrspath_c, train_idx, test_idx)
+    trainNbrs_r, testNbrs_r = my_feature_split(nbrspath_r, train_idx, test_idx)
     trainNbrs_Z_r, testNbrs_Z_r = my_feature_split(nbrszpath_r, train_idx, test_idx)
     trainY, testY = my_target_split(targetpath, train_idx, test_idx)
     train_dataset = GraphDataset(trainX_c, trainZ_c, trainNbrs_c, trainNbrs_Z_c, trainX_l, trainZ_l, trainNbrs_l, trainNbrs_Z_l, trainX_r, trainZ_r, trainNbrs_r, trainNbrs_Z_r, trainY)
