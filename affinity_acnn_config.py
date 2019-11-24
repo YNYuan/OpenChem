@@ -98,8 +98,8 @@ def get_dataset(xpath_c, zpath_c, nbrspath_c, nbrszpath_c, xpath_l, zpath_l, nbr
     return train_dataset, test_dataset
 
 train_dataset, test_dataset = get_dataset('../3d_dataset/complex_matrix.npy', '../3d_dataset/complex_type.npy', 
-'../3d_dataset/complex_distance_matrix.npy', '../3d_dataset/complex_atomtype_matrix.npy', '../3d_dataset/ligand_matrix.npy', '../3d_dataset/ligand_type.npy', 
-'../3d_dataset/ligand_distance_matrix.npy', '../3d_dataset/ligand_atomtype_matrix.npy', '../3d_dataset/rec_matrix.npy', '../3d_dataset/rec_type.npy', 
+'../3d_dataset/complex_distance_matrix.npy', '../3d_dataset/complex_atomtype_matrix.npy', '../3d_dataset/ligand_matrix.npy', '../3d_dataset/ligand_atomtype.npy', 
+'../3d_dataset/ligand_distance_matrix.npy', '../3d_dataset/ligand_atomtype_matrix.npy', '../3d_dataset/rec_matrix.npy', '../3d_dataset/rec_atomtype.npy', 
 '../3d_dataset/rec_distance_matrix.npy', '../3d_dataset/rec_atomtype_matrix.npy', '../3d_dataset/whole_data.csv')
 
 model = AtomicConvModel0
