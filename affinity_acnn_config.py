@@ -84,7 +84,7 @@ model_params = {
     'data_layer': GraphDataset,
     'use_clip_grad': False,
     'batch_size': 3,
-    'num_epochs': 100,
+    'num_epochs': 3,
     'logdir': './acnnlogs',
     'print_every': 10,
     'save_every': 1,

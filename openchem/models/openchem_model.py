@@ -168,19 +168,21 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
         all_losses.append(cur_loss)
 
         if epoch % print_every == 0:
+            _, train_metrics = evaluate(model, train_loader, criterion)
             if print_logs(world_size):
                 print('TRAINING: [Time: %s, Epoch: %d, Progress: %d%%, '
-                      'Loss: %.4f]' % (time_since(start), epoch,
-                                       epoch / n_epochs * 100, cur_loss))
+                      'Loss: %.4f, Metrics: %.4f]' % (time_since(start), epoch,
+                                       epoch / n_epochs * 100, cur_loss, train_metrics))
             if eval:
                 assert val_loader is not None
-                val_loss, metrics = evaluate(model, val_loader, criterion)
+                val_loss, val_metrics = evaluate(model, val_loader, criterion)
                 val_losses.append(val_loss)
                 info = {'Train loss': cur_loss, 'Validation loss': val_loss,
-                        'Validation metrics': metrics,
+                        'Train metrics': train_metrics, 'Validation metrics': val_metrics,
                         'LR': optimizer.param_groups[0]['lr']}
             else:
                 info = {'Train loss': cur_loss,
+                        'Train metrics': train_metrics,
                         'LR': optimizer.param_groups[0]['lr']}
 
             if print_logs(world_size):
@@ -204,7 +206,7 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
         loss_total = 0
         n_batches = 0
         scheduler.step()
-
+    logger.close()
     return all_losses, val_losses
 
 
@@ -241,8 +243,6 @@ def evaluate(model, val_loader, criterion):
     cur_loss = loss_total / n_batches
     if task == 'classification':
         prediction = np.argmax(prediction, axis=1)
-    #print(len(prediction))
-    #print(len(ground_truth))
     metrics = calculate_metrics(prediction, ground_truth,
                                 eval_metrics)
     if print_logs(world_size):
