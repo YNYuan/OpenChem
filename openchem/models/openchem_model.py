@@ -239,6 +239,8 @@ def evaluate(model, val_loader, criterion):
         n_batches += 1
     print('prediction value: ', prediction, '\n')
     print('true value: ', ground_truth, '\n')
+    np.save('test_prediction', np.asarray(prediction))
+    np.save('test_true', np.asarray(ground_truth))
     cur_loss = loss_total / n_batches
     if task == 'classification':
         prediction = np.argmax(prediction, axis=1)
