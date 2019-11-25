@@ -206,7 +206,6 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
         loss_total = 0
         n_batches = 0
         scheduler.step()
-    logger.close()
     return all_losses, val_losses
 
 
