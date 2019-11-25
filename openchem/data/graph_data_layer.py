@@ -53,3 +53,45 @@ class GraphDataset(Dataset):
                       self.node_feature_matrix[index].astype('float32'),
                   'labels': self.target[index].astype('float32')}
         return sample
+
+
+class GraphDataset_Atom(Dataset):
+    def __init__(self, X_matrix_c, Z_matrix_c, R_matrix_c, Nbrs_Z_matrix_c, X_matrix_l, Z_matrix_l, R_matrix_l, Nbrs_Z_matrix_l, X_matrix_r, Z_matrix_r, R_matrix_r, Nbrs_Z_matrix_r, target):
+        super(GraphDataset_Atom, self).__init__()
+        self.X_matrix_c = X_matrix_c
+        self.Z_matrix_c = Z_matrix_c
+        #self.Nbrs_matrix = Nbrs_matrix
+        self.R_matrix_c = R_matrix_c
+        self.Nbrs_Z_matrix_c = Nbrs_Z_matrix_c
+        self.X_matrix_l = X_matrix_l
+        self.Z_matrix_l = Z_matrix_l
+        self.R_matrix_l = R_matrix_l
+        self.Nbrs_Z_matrix_l = Nbrs_Z_matrix_l
+        self.X_matrix_r = X_matrix_r
+        self.Z_matrix_r = Z_matrix_r
+        self.R_matrix_r = R_matrix_r
+        self.Nbrs_Z_matrix_r = Nbrs_Z_matrix_r
+        self.target = target
+        #self.num_features = X_matrix.shape[2]
+
+    def __len__(self):
+        return len(self.target)
+
+    def __getitem__(self, index):
+        sample = {
+            'X_matrix_c': self.X_matrix_c[index].astype('float32'),
+            'Z_matrix_c': self.Z_matrix_c[index].astype('float32'),
+            # 'Nbrs_matrix': self.Nbrs_matrix[index].astype('float32'),
+            'R_matrix_c': self.R_matrix_c[index].astype('float32'),
+            'Nbrs_Z_matrix_c': self.Nbrs_Z_matrix_c[index].astype('float32'),
+            'X_matrix_l': self.X_matrix_l[index].astype('float32'),
+            'Z_matrix_l': self.Z_matrix_l[index].astype('float32'),
+            'R_matrix_l': self.R_matrix_l[index].astype('float32'),
+            'Nbrs_Z_matrix_l': self.Nbrs_Z_matrix_l[index].astype('float32'),
+            'X_matrix_r': self.X_matrix_r[index].astype('float32'),
+            'Z_matrix_r': self.Z_matrix_r[index].astype('float32'),
+            'R_matrix_r': self.R_matrix_r[index].astype('float32'),
+            'Nbrs_Z_matrix_r': self.Nbrs_Z_matrix_r[index].astype('float32'),
+            'target': self.target[index].astype('float32')
+        }
+        return sample

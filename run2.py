@@ -45,7 +45,7 @@ def main():
 
     args, unknown = parser.parse_known_args()
 
-    if args.mode not in ['train', 'eval', 'train_eval', 'eval_both']:
+    if args.mode not in ['train', 'eval', 'train_eval']:
         raise ValueError("Mode has to be one of "
                          "['train', 'eval', 'train_eval']")
     config_module = runpy.run_path(args.config_file)
@@ -123,7 +123,7 @@ def main():
                             "You should probably not provide "
                             "\"--continue_learning\" flag?")
                     checkpoint = None
-            elif args.mode == 'eval' or args.mode == 'eval_both':
+            elif args.mode == 'eval':
                 if os.path.isdir(logdir) and os.listdir(logdir) != []:
                     checkpoint = get_latest_checkpoint(ckpt_dir)
                     if checkpoint is None:
@@ -156,7 +156,7 @@ def main():
         if 'train_params' in config_module:
             nested_update(train_config,
                           copy.deepcopy(config_module['train_params']))
-    if args.mode == 'eval' or args.mode == 'train_eval' or args.mode == 'eval_both':
+    if args.mode == 'eval' or args.mode == 'train_eval':
         if 'eval_params' in config_module:
             nested_update(eval_config,
                           copy.deepcopy(config_module['eval_params']))
@@ -173,7 +173,7 @@ def main():
                 "Restored checkpoint from {}. Resuming training".format(
                     checkpoint),
             )
-    elif args.mode == 'eval' or args.mode == 'eval_both':
+    elif args.mode == 'eval':
         deco_print("Loading model from {}".format(checkpoint))
 
     if args.distributed:
@@ -190,7 +190,7 @@ def main():
 
     cudnn.benchmark = True
 
-    if args.mode == "train" or args.mode == "train_eval" or args.mode == "eval_both":
+    if args.mode == "train" or args.mode == "train_eval":
         train_dataset = model_config['train_data_layer']#copy.deepcopy(model_config['train_data_layer'])
         if model_config['task'] == 'classification':
             train_dataset.target = train_dataset.target.reshape(-1)
@@ -204,14 +204,14 @@ def main():
     else:
         train_loader = None
 
-    if args.mode in ["eval", "train_eval", "eval_both"] and (
+    if args.mode in ["eval", "train_eval"] and (
             'val_data_layer' not in model_config.keys() or model_config[
         'val_data_layer'] is None):
         raise IOError(
             "When model is run in 'eval' or 'train_eval' modes, "
             "validation data layer must be specified")
 
-    if args.mode in ["eval", "train_eval", "eval_both"]:
+    if args.mode in ["eval", "train_eval"]:
         val_dataset = model_config['val_data_layer']#copy.deepcopy(model_config['val_data_layer'])
         if model_config['task'] == 'classification':
             val_dataset.target = val_dataset.target.reshape(-1)
@@ -249,11 +249,6 @@ def main():
         fit(model, lr_scheduler, train_loader, optimizer, criterion,
             model_config, eval=True, val_loader=val_loader)
     elif args.mode == "eval":
-        evaluate(model, val_loader, criterion)
-    elif args.mode == "eval_both":
-        print("Train Evaluation: ")
-        evaluate(model, train_loader, criterion)
-        print('\n', "Test Evaluation: ")
         evaluate(model, val_loader, criterion)
 
 

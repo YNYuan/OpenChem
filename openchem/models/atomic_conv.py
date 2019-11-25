@@ -14,10 +14,10 @@ from openchem.layers.ac import AtomicConvolution
 from openchem.models.openchem_model import OpenChemModel
 
 
-class AtomicConvModel0(OpenChemModel):
+class AtomicConvModel(OpenChemModel):
 
   def __init__(self, params):
-    super(AtomicConvModel0, self).__init__(params)
+    super(AtomicConvModel, self).__init__(params)
 
     self.radial = params['radial']
     self.atom_types = params['atom_types']

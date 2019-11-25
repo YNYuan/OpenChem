@@ -3,6 +3,7 @@
 import time
 import math
 import numpy as np
+import pandas as pd
 import csv
 import warnings
 
@@ -242,3 +243,44 @@ def save_smiles_property_file(path, smiles, labels, delimiter=','):
             f.writelines(delimiter + str(labels[i, j]))
         f.writelines('\n')
     f.close()
+
+
+def random_index(length, train_size):
+    indices = np.random.permutation(length)
+    cutNum = int(np.floor(length*train_size))
+    train_idx, test_idx = indices[:cutNum], indices[cutNum:]
+    return train_idx, test_idx
+
+
+def my_feature_split(matrix_path, train_idx, test_idx):
+    matrix = np.load(matrix_path)
+    train_matrix, test_matrix = matrix[train_idx,:,:], matrix[test_idx,:,:]
+    return train_matrix, test_matrix
+
+
+def my_target_split(whole_path, train_idx, test_idx):
+    name_file = pd.read_csv(whole_path)
+    target = name_file['affinity'].values
+    trainY = target[train_idx].reshape(-1,1)
+    testY = target[test_idx].reshape(-1,1)
+    return trainY, testY
+
+def get_dataset(xpath_c, zpath_c, nbrspath_c, nbrszpath_c, xpath_l, zpath_l, nbrspath_l, nbrszpath_l, xpath_r, zpath_r, nbrspath_r, nbrszpath_r, targetpath):
+    train_idx, test_idx = random_index(2770, 0.8)
+
+    trainX_c, testX_c = my_feature_split(xpath_c, train_idx, test_idx)
+    trainZ_c, testZ_c = my_feature_split(zpath_c, train_idx, test_idx)
+    trainNbrs_c, testNbrs_c = my_feature_split(nbrspath_c, train_idx, test_idx)
+    trainNbrs_Z_c, testNbrs_Z_c = my_feature_split(nbrszpath_c, train_idx, test_idx)
+    trainX_l, testX_l = my_feature_split(xpath_l, train_idx, test_idx)
+    trainZ_l, testZ_l = my_feature_split(zpath_l, train_idx, test_idx)
+    trainNbrs_l, testNbrs_l = my_feature_split(nbrspath_l, train_idx, test_idx)
+    trainNbrs_Z_l, testNbrs_Z_l = my_feature_split(nbrszpath_l, train_idx, test_idx)
+    trainX_r, testX_r = my_feature_split(xpath_r, train_idx, test_idx)
+    trainZ_r, testZ_r = my_feature_split(zpath_r, train_idx, test_idx)
+    trainNbrs_r, testNbrs_r = my_feature_split(nbrspath_r, train_idx, test_idx)
+    trainNbrs_Z_r, testNbrs_Z_r = my_feature_split(nbrszpath_r, train_idx, test_idx)
+    trainY, testY = my_target_split(targetpath, train_idx, test_idx)
+    train_dataset = GraphDataset_Atom(trainX_c, trainZ_c, trainNbrs_c, trainNbrs_Z_c, trainX_l, trainZ_l, trainNbrs_l, trainNbrs_Z_l, trainX_r, trainZ_r, trainNbrs_r, trainNbrs_Z_r, trainY)
+    test_dataset = GraphDataset_Atom(testX_c, testZ_c, testNbrs_c, testNbrs_Z_c, testX_l, testZ_l, testNbrs_l, testNbrs_Z_l, testX_r, testZ_r, testNbrs_r, testNbrs_Z_r, testY)
+    return train_dataset, test_dataset
