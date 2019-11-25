@@ -249,7 +249,7 @@ def main():
         fit(model, lr_scheduler, train_loader, optimizer, criterion,
             model_config, eval=True, val_loader=val_loader)
     elif args.mode == "eval":
-        evaluate(model, val_loader, criterion)
+        evaluate(model, train_loader, criterion)
 
 
 if __name__ == '__main__':
