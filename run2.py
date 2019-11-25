@@ -190,7 +190,7 @@ def main():
 
     cudnn.benchmark = True
 
-    if args.mode == "train" or args.mode == "train_eval":
+    if args.mode == "train" or args.mode == "train_eval" or args.mode == "eval":
         train_dataset = model_config['train_data_layer']#copy.deepcopy(model_config['train_data_layer'])
         if model_config['task'] == 'classification':
             train_dataset.target = train_dataset.target.reshape(-1)
