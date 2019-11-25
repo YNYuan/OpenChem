@@ -38,7 +38,7 @@ def my_target_split(whole_path, train_idx, test_idx):
     return trainY, testY
 
 def get_dataset(xpath_c, zpath_c, nbrspath_c, nbrszpath_c, xpath_l, zpath_l, nbrspath_l, nbrszpath_l, xpath_r, zpath_r, nbrspath_r, nbrszpath_r, targetpath):
-    train_idx, test_idx = random_index(20, 0.8)
+    train_idx, test_idx = random_index(2770, 0.8)
 
     trainX_c, testX_c = my_feature_split(xpath_c, train_idx, test_idx)
     trainZ_c, testZ_c = my_feature_split(zpath_c, train_idx, test_idx)
