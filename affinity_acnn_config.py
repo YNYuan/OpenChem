@@ -18,7 +18,7 @@ import pickle
 
 # for the case we have dataset
 def random_index(length, train_size):
-    indices = np.random.permutation(length)
+    indices = np.random.RandomState(seed=32).permutation(length)
     cutNum = int(np.floor(length*train_size))
     train_idx, test_idx = indices[:cutNum], indices[cutNum:]
     return train_idx, test_idx
