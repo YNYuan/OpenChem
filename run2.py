@@ -190,7 +190,7 @@ def main():
 
     cudnn.benchmark = True
 
-    if args.mode == "train" or args.mode == "train_eval" or args.mode == "eval":
+    if args.mode == "train" or args.mode == "train_eval":
         train_dataset = model_config['train_data_layer']#copy.deepcopy(model_config['train_data_layer'])
         if model_config['task'] == 'classification':
             train_dataset.target = train_dataset.target.reshape(-1)
@@ -249,7 +249,7 @@ def main():
         fit(model, lr_scheduler, train_loader, optimizer, criterion,
             model_config, eval=True, val_loader=val_loader)
     elif args.mode == "eval":
-        evaluate(model, train_loader, criterion)
+        evaluate(model, val_dataset, criterion)
 
 
 if __name__ == '__main__':
