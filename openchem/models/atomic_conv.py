@@ -48,7 +48,7 @@ class AtomicConvModel(OpenChemModel):
     ligand_R = input[2]
     ligand_Nbrs_Z = input[3]
     
-    ligand_conv = self.conv_l.forward([ligand_X, ligand_R, ligand_Nbrs_Z])
+    ligand_conv = self.conv.forward([ligand_X, ligand_R, ligand_Nbrs_Z])
 
     ligand_zeros = torch.zeros_like(ligand_Z)
     ligand_atomtype_energy = []
