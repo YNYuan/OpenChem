@@ -81,11 +81,11 @@ class AtomicConvModel(OpenChemModel):
     else:
         batch_labels = batch_labels.float()
     if self.use_cuda:
-        batch_X = batch_X_c.cuda()
-        batch_Z = batch_Z_c.cuda()
+        batch_X = batch_X.cuda()
+        batch_Z = batch_Z.cuda()
         #batch_Nbrs = batch_Nbrs.cuda()
-        batch_R = batch_R_c.cuda()
-        batch_Nbrs_Z = batch_Nbrs_Z_c.cuda()
+        batch_R = batch_R.cuda()
+        batch_Nbrs_Z = batch_Nbrs_Z.cuda()
         batch_labels = batch_labels.cuda()
     batch_inp = (batch_X, batch_Z, batch_R, batch_Nbrs_Z)
     return batch_inp, batch_labels
