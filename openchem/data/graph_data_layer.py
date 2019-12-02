@@ -63,6 +63,7 @@ class GraphDataset_Atom(Dataset):
         #self.Nbrs_matrix = Nbrs_matrix
         self.R_matrix = R_matrix
         self.Nbrs_Z_matrix = Nbrs_Z_matrix
+        self.target = target
 
     def __len__(self):
         return len(self.target)
