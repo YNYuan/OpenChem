@@ -1,6 +1,6 @@
-from openchem.models.atomic_conv import AtomicConvModel
+from openchem.models.atomic_conv import AtomicConvModel0, AtomicConvModel
 from openchem.modules.mlp.openchem_mlp import OpenChemMLP
-from openchem.data.graph_data_layer import GraphDataset_Atom
+from openchem.data.graph_data_layer import GraphDataset_Single, GraphDataset_Multi
 #from openchem.data.utils import get_dataset
 
 import torch.nn as nn
@@ -37,20 +37,50 @@ def my_target_split(whole_path, train_idx, test_idx):
     testY = target[test_idx].reshape(-1,1)
     return trainY, testY
 
-def get_dataset(xpath, zpath, nbrspath, nbrszpath, targetpath):
+def get_dataset_single(xpath, zpath, nbrspath, nbrszpath, targetpath):
     train_idx, test_idx = random_index(2770, 0.8)
-
     trainX, testX = my_feature_split(xpath, train_idx, test_idx)
     trainZ, testZ = my_feature_split(zpath, train_idx, test_idx)
     trainNbrs, testNbrs = my_feature_split(nbrspath, train_idx, test_idx)
     trainNbrs_Z, testNbrs_Z = my_feature_split(nbrszpath, train_idx, test_idx)
     trainY, testY = my_target_split(targetpath, train_idx, test_idx)
-    train_dataset = GraphDataset_Atom(trainX, trainZ, trainNbrs, trainNbrs_Z, trainY)
-    test_dataset = GraphDataset_Atom(testX, testZ, testNbrs, testNbrs_Z, testY)
+    train_dataset = GraphDataset_Single(trainX, trainZ, trainNbrs, trainNbrs_Z, trainY)
+    test_dataset = GraphDataset_Single(testX, testZ, testNbrs, testNbrs_Z, testY)
     return train_dataset, test_dataset
 
-train_dataset, test_dataset = get_dataset('../3d_dataset/ligand_matrix.npy', '../3d_dataset/ligand_atomtype.npy', 
-'../3d_dataset/ligand_distance_matrix.npy', '../3d_dataset/ligand_atomtype_matrix.npy', '../3d_dataset/whole_data.csv')
+def get_dataset_multi(xpath_l, zpath_l, nbrspath_l, nbrszpath_l, xpath_r, zpath_r, 
+nbrspath_r, nbrszpath_r, xpath_c, zpath_c, nbrspath_c, nbrszpath_c, targetpath):
+    train_idx, test_idx = random_index(2770, 0.8)
+    trainX_l, testX_l = my_feature_split(xpath_l, train_idx, test_idx)
+    trainZ_l, testZ_l = my_feature_split(zpath_l, train_idx, test_idx)
+    trainNbrs_l, testNbrs_l = my_feature_split(nbrspath_l, train_idx, test_idx)
+    trainNbrs_Z_l, testNbrs_Z_l = my_feature_split(nbrszpath_l, train_idx, test_idx)
+    trainX_r, testX_r = my_feature_split(xpath_r, train_idx, test_idx)
+    trainZ_r, testZ_r = my_feature_split(zpath_r, train_idx, test_idx)
+    trainNbrs_r, testNbrs_r = my_feature_split(nbrspath_r, train_idx, test_idx)
+    trainNbrs_Z_r, testNbrs_Z_r = my_feature_split(nbrszpath_r, train_idx, test_idx)
+    trainX_c, testX_c = my_feature_split(xpath_c, train_idx, test_idx)
+    trainZ_c, testZ_c = my_feature_split(zpath_c, train_idx, test_idx)
+    trainNbrs_c, testNbrs_c = my_feature_split(nbrspath_c, train_idx, test_idx)
+    trainNbrs_Z_c, testNbrs_Z_c = my_feature_split(nbrszpath_c, train_idx, test_idx)
+    trainY, testY = my_target_split(targetpath, train_idx, test_idx)
+    train_dataset = GraphDataset_Multi(trainX_l, trainZ_l, trainNbrs_l, trainNbrs_Z_l, 
+    trainX_r, trainZ_r, trainNbrs_r, trainNbrs_Z_r, trainX_c, trainZ_c, 
+    trainNbrs_c, trainNbrs_Z_c, trainY)
+    test_dataset = GraphDataset_Multi(testX_l, testZ_l, testNbrs_l, testNbrs_Z_l, 
+    testX_r, testZ_r, testNbrs_r, testNbrs_Z_r, testX_c, testZ_c, testNbrs_c, 
+    testNbrs_Z_c, testY)
+    return train_dataset, test_dataset
+
+# train_dataset_l, test_dataset_l = get_dataset_single('../3d_dataset/ligand_coord.npy', '../3d_dataset/ligand_type.npy', 
+# '../3d_dataset/ligand_distance_matrix.npy', '../3d_dataset/ligand_atomtype_matrix.npy', '../3d_dataset/whole_data.csv')
+train_dataset, test_dataset = get_dataset_multi('../3d_dataset/ligand_coord.npy', 
+'../3d_dataset/ligand_type.npy', '../3d_dataset/ligand_distance_matrix.npy', 
+'../3d_dataset/ligand_atomtype_matrix.npy', '../3d_dataset/rec_coord_new.npy', 
+'../3d_dataset/rec_type_new.npy', '../3d_dataset/rec_distance_matrix.npy', 
+'../3d_dataset/rec_atomtype_matrix.npy', '../3d_dataset/complex_coord_new.npy', 
+'../3d_dataset/complex_type_new.npy', '../3d_dataset/complex_distance_matrix.npy', 
+'../3d_dataset/complex_atomtype_matrix.npy', '../3d_dataset/whole_data.csv')
 
 #for the case we don't have dataset, only have raw PDB data
 #TODO
@@ -59,13 +89,13 @@ model = AtomicConvModel
 
 model_params = {
     'task': 'regression',
-    'data_layer': GraphDataset_Atom,
+    'data_layer': GraphDataset_Multi,
     'use_clip_grad': False,
     'batch_size': 12,
     'num_epochs': 100,
-    'logdir': './acnnlogs_ligand',
+    'logdir': './acnnlogs',
     'print_every': 10,
-    'save_every': 5,
+    'save_every': 4,
     'train_data_layer': train_dataset,
     'val_data_layer': test_dataset,
     'eval_metrics': r2_score,

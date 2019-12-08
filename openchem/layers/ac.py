@@ -31,8 +31,8 @@ class AtomicConvolution(nn.Module):
         Nbrs_Z = inputs[2]
         N = X.size()[-2]
         d = X.size()[-1]
-        M = R.size()[-1]
         B = X.size()[0]
+        M = R.size()[-1]
         #D = self.distance_tensor(X, Nbrs, self.boxsize, B, N, M, d)
         #R = self.distance_matrix(D)
         R = torch.unsqueeze(R, 0)
