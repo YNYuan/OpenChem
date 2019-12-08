@@ -102,7 +102,7 @@ model_params = {
     'criterion': nn.MSELoss(),
     'optimizer': Adam,
     'optimizer_params': {
-        'lr': 0.001,
+        'lr': 0.005,
     },
     'lr_scheduler': StepLR,
     'lr_scheduler_params': {
