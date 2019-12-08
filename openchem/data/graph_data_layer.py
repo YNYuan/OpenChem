@@ -57,7 +57,7 @@ class GraphDataset(Dataset):
 
 class GraphDataset_Single(Dataset):
     def __init__(self, X_matrix, Z_matrix, R_matrix, Nbrs_Z_matrix, target):
-        super(GraphDataset_Atom, self).__init__()
+        super(GraphDataset_Single, self).__init__()
         self.X_matrix = X_matrix
         self.Z_matrix = Z_matrix
         #self.Nbrs_matrix = Nbrs_matrix
@@ -84,7 +84,7 @@ class GraphDataset_Multi(Dataset):
     def __init__(self, X_matrix_l, Z_matrix_l, R_matrix_l, Nbrs_Z_matrix_l, X_matrix_r, 
     Z_matrix_r, R_matrix_r, Nbrs_Z_matrix_r, X_matrix_c, Z_matrix_c, R_matrix_c, 
     Nbrs_Z_matrix_c, target):
-        super(GraphDataset_Atom, self).__init__()
+        super(GraphDataset_Multi, self).__init__()
         self.X_matrix_l = X_matrix_l
         self.Z_matrix_l = Z_matrix_l
         #self.Nbrs_matrix = Nbrs_matrix
