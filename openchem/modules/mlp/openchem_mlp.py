@@ -50,11 +50,11 @@ class OpenChemMLP(nn.Module):
     def forward(self, inp):
         output = inp
         for i in range(self.n_layers-1):
-            output = self.dropouts[i](output)
+            #output = self.dropouts[i](output)
             output = self.layers[i](output)
-            output = self.bn[i](output)
+            #output = self.bn[i](output)
             output = self.activation[i](output)
-        output = self.dropouts[-1](output)
+        #output = self.dropouts[-1](output)
         output = self.layers[-1](output)
         output = self.activation[-1](output)    
         return output
