@@ -106,8 +106,8 @@ model_params = {
     },
     'lr_scheduler': StepLR,
     'lr_scheduler_params': {
-        'step_size': 15,
-        'gamma': 0.5
+        'step_size': 50,
+        'gamma': 0.9
     },
     'mlp': OpenChemMLP,
     'mlp_params': {
