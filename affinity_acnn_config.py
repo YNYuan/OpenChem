@@ -93,7 +93,7 @@ model_params = {
     'use_clip_grad': False,
     'batch_size': 24,
     'num_epochs': 100,
-    'logdir': './acnnlogs',
+    'logdir': './acnnlogs_faster',
     'print_every': 10,
     'save_every': 4,
     'train_data_layer': train_dataset,
