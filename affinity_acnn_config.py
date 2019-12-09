@@ -102,7 +102,7 @@ model_params = {
     'criterion': nn.MSELoss(),
     'optimizer': Adam,
     'optimizer_params': {
-        'lr': 0.02,
+        'lr': 0.01,
     },
     'lr_scheduler': StepLR,
     'lr_scheduler_params': {
@@ -113,7 +113,7 @@ model_params = {
     'mlp_params': {
         'input_size': 594,
         'n_layers': 3,
-        'hidden_size': [16, 8, 1],
+        'hidden_size': [8, 4, 1],
         'activation': [F.relu, F.relu, nn.Identity()],
     },
     'radial': [[
