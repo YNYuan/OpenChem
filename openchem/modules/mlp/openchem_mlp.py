@@ -21,16 +21,16 @@ class OpenChemMLP(nn.Module):
             assert len(self.activation) == self.n_layers
         else:
             self.activation = [self.activation]*self.n_layers
-        if 'dropout' in self.params.keys():
-            self.dropout = self.params['dropout']
-        else:
-            self.dropout = 0
+        # if 'dropout' in self.params.keys():
+        #     self.dropout = self.params['dropout']
+        # else:
+        #     self.dropout = 0
         self.layers = nn.ModuleList([])
-        self.bn = nn.ModuleList([])
-        self.dropouts = nn.ModuleList([])
+        # self.bn = nn.ModuleList([])
+        # self.dropouts = nn.ModuleList([])
         for i in range(self.n_layers):
-            self.dropouts.append(nn.Dropout(self.dropout))
-            self.bn.append(nn.BatchNorm1d(self.hidden_size[i]))
+            # self.dropouts.append(nn.Dropout(self.dropout))
+            # self.bn.append(nn.BatchNorm1d(self.hidden_size[i]))
             self.layers.append(nn.Linear(in_features=self.input_size[i],
                                       out_features=self.hidden_size[i]))
 
@@ -50,11 +50,11 @@ class OpenChemMLP(nn.Module):
     def forward(self, inp):
         output = inp
         for i in range(self.n_layers-1):
-            #output = self.dropouts[i](output)
+            # output = self.dropouts[i](output)
             output = self.layers[i](output)
             #output = self.bn[i](output)
             output = self.activation[i](output)
-        #output = self.dropouts[-1](output)
+        # output = self.dropouts[-1](output)
         output = self.layers[-1](output)
         output = self.activation[-1](output)    
         return output
