@@ -40,7 +40,7 @@ model_params = {
     'use_clip_grad': False,
     'batch_size': 24,
     'num_epochs': 100,
-    'logdir': './acnnlogs_step',
+    'logdir': './acnnlogs',
     'print_every': 10,
     'save_every': 4,
     'train_data_layer': train_dataset,
@@ -59,9 +59,9 @@ model_params = {
     'mlp': OpenChemMLP,
     'mlp_params': {
         'input_size': 594,
-        'n_layers': 3,
-        'hidden_size': [8, 4, 1],
-        'activation': [F.relu, F.relu, nn.Identity()],
+        'n_layers': 4,
+        'hidden_size': [16, 16, 8, 1],
+        'activation': [F.relu, F.relu, F.relu, nn.Identity()],
     },
     'radial': [[
         1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0,

@@ -142,7 +142,7 @@ class ACDataGenarator():
         return Nbr_distance_matrix, Nbr_type_matrix
 
 
-myGenerator = ACDataGenarator("refinedSet.txt", 5)
+myGenerator = ACDataGenarator("refinedSet.txt", 12)
 whole_file = myGenerator.rawDataReader("refined-set/")
 ligand_coord, ligand_type = myGenerator.coordData(whole_file['ligand_coord'], whole_file['ligand_type'], 'ligand')
 rec_coord, rec_type = myGenerator.coordData(whole_file['rec_coord'], whole_file['rec_type'], 'rec')
@@ -151,12 +151,12 @@ complex_coord, complex_type = myGenerator.coordDataComplex(ligand_coord, ligand_
 
 ligand_distance_matrix, ligand_type_matrix = myGenerator.neighborData(ligand_coord, ligand_type)
 np.save('ligand_distance_matrix', ligand_distance_matrix)
-np.save('ligand_type_matrix', ligand_type_matrix)
+np.save('ligand_atomtype_matrix', ligand_type_matrix)
 
 rec_distance_matrix, rec_type_matrix = myGenerator.neighborData(rec_coord_new, rec_type_new)
 np.save('rec_distance_matrix', rec_distance_matrix)
-np.save('rec_type_matrix', rec_type_matrix)
+np.save('rec_atomtype_matrix', rec_type_matrix)
 
 complex_distance_matrix, complex_type_matrix = myGenerator.neighborData(complex_coord, complex_type)
 np.save('complex_distance_matrix', complex_distance_matrix)
-np.save('complex_type_matrix', complex_type_matrix)
+np.save('complex_atomtype_matrix', complex_type_matrix)
