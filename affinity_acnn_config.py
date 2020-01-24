@@ -30,7 +30,7 @@ train_dataset, test_dataset = myReader.get_dataset_multi('../3d_dataset/ligand_c
 '../3d_dataset/complex_atomtype_matrix.npy', '../3d_dataset/whole_data.csv')
 
 #for the case we don't have dataset, only have raw PDB data
-#TODO
+#run 'data_generator.py' first, then run this script
 
 model = AtomicConvModel
 
