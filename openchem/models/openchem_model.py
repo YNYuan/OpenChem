@@ -130,7 +130,7 @@ def print_logs(world_size):
 
 def fit(model, scheduler, train_loader, optimizer, criterion, params,
         eval=False, val_loader=None):
-    cur_epoch = 0
+    cur_epoch = 1
     logdir = params['logdir']
     print_every = params['print_every']
     save_every = params['save_every']
@@ -150,7 +150,7 @@ def fit(model, scheduler, train_loader, optimizer, criterion, params,
     else:
         world_size = model.world_size     
 
-    for epoch in range(cur_epoch, n_epochs + cur_epoch + 1):
+    for epoch in range(cur_epoch, n_epochs + cur_epoch):
         for i_batch, sample_batched in enumerate(train_loader):
             if has_module:
                 batch_input, batch_target = model.module.cast_inputs(sample_batched)
